@@ -7,9 +7,9 @@
 
 #### Code Structure
 
-- `SimulationUI`: C++ rigid body simulation to visualize the controller's performance. (C++)
+- `SimulationUI`: C++ rigid body simulation to visualize the controller's performance. (C++, Coming Soon)
 - `Training`: Code to train the controller with our method with Reinforcement Learning. (Python)
-- `ardupilot`: Modified Ardupilot firmware code to implement our controller on real hardware. (C++)
+- `ardupilot`: Modified Ardupilot firmware code to implement our controller on real hardware. (C++, Coming soon)
 
 
 
