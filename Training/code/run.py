@@ -23,7 +23,7 @@ def train(num_timesteps, copter_model, model_directory, save_model_interval, sav
             hid_size=64, num_hid_layers=2)
 
     train_env = hybrid3D_env.Hybrid3DEnv(data_folder = "../data/", config_file = copter_model + ".xml", play = False)
-    play_env = hybrid3D_env.Hybrid3DEnv(data_folder = "../data/", config_file = copter_model + ".xml", play = visualize)
+    play_env = hybrid3D_env.Hybrid3DEnv(data_folder = "../data/", config_file = copter_model + ".xml", play = visualize or play)
 
     pposgd_simple.learn(train_env, play_env, policy_fn,
             max_timesteps=num_timesteps,

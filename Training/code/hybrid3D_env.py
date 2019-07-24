@@ -1,5 +1,3 @@
-import mujoco_rendering_env
-from mujoco_rendering_env import mujoco_env
 import rotor
 from rotor import Rotor
 import wing
@@ -45,7 +43,11 @@ class Hybrid3DEnv(gym.Env):
         self.parse_config_file(data_folder + config_file)
         
         # construct rendering environment
-        self.render_env = mujoco_env.MujocoEnv(model_path = data_folder + self.render_filename)
+        if play:
+            from mujoco_rendering_env import mujoco_env
+            self.render_env = mujoco_env.MujocoEnv(model_path = data_folder + self.render_filename)
+        else:
+            self.render_env = None
         self.render_intervel = int(1.0 / 50.0 / self.dt_mean)
 
         # self.render_env._get_viewer()
