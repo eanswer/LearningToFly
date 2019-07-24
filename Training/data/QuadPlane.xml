@@ -1,0 +1,10 @@
+<model model="QuadPlane">
+    <render_file filename="quadrotor_render.xml" />
+    <mass_property mass="1.779" inertia_tensor="0.194 0.000 -0.007 0.000 0.064 0.000 -0.007 0.000 0.253" />
+    <rotor name="front_motor" position="0.292 0.000 0.069" direction="1 0 0" clockwise="1" torque_coef="0.01554" />
+    <rotor name="front_right_motor" position="0.207 0.305 -0.003" direction="0 0 -1" clockwise="0" torque_coef="0.01554" />
+    <rotor name="back_left_motor" position="-0.260 -0.304 -0.003" direction="0 0 -1" clockwise="0" torque_coef="0.01554" />
+    <rotor name="front_left_motor" position="0.210 -0.304 -0.003" direction="0 0 -1" clockwise="1" torque_coef="0.01554" />
+    <rotor name="back_right_motor" position="-0.263 0.305 -0.003" direction="0 0 -1" clockwise="1" torque_coef="0.01554" />
+    <wing  name="wing" area="0.326" direction="1 0 0" angle0="5" />
+</model>

@@ -1,0 +1,9 @@
+<model model="TailSitter">
+    <render_file filename="quadrotor_render.xml" />
+    <mass_property mass="1.108" inertia_tensor="0.133 0.0005 -0.0002 0.0005 0.025 0.000 -0.0002 0.000 0.149" />
+    <rotor name="front_right_motor" position="0.227 0.313 -0.026" direction="0 0 -1" clockwise="0" torque_coef="0.01554" />
+    <rotor name="back_left_motor" position="-0.246 -0.314 -0.026" direction="0 0 -1" clockwise="0" torque_coef="0.01554" />
+    <rotor name="front_left_motor" position="0.238 -0.314 -0.026" direction="0 0 -1" clockwise="1" torque_coef="0.01554" />
+    <rotor name="back_right_motor" position="-0.246 0.313 -0.026" direction="0 0 -1" clockwise="1" torque_coef="0.01554" />
+    <wing  name="wing" area="0.302" direction="0 0 -1" angle0="0" />
+</model>
