@@ -49,4 +49,8 @@
   python run.py --model QuadPlane --controller model_afterIter_400 --play
   ```
 
-- To save a trained mode to a `c++` format to be plugged into the `SimulationUI` code or `ardupilot` firmware code
+- To save a trained mode to a `c++` format to be plugged into the `SimulationUI` code or `ardupilot` firmware code.
+
+  ```
+  python save.py --controller model_afterIter_400
+  ```

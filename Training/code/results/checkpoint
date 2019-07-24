@@ -1,2 +1,2 @@
-model_checkpoint_path: "best_model.ckpt"
-all_model_checkpoint_paths: "best_model.ckpt"
+model_checkpoint_path: "model_afterIter_375.ckpt"
+all_model_checkpoint_paths: "model_afterIter_375.ckpt"
