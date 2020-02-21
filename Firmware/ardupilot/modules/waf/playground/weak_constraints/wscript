@@ -1,0 +1,40 @@
+#! /usr/bin/env python
+# encoding: utf-8
+
+"""
+Illustrates how to force yellow tasks to be executed very soon after the green ones
+"""
+
+import time
+
+def options(ctx):
+	ctx.load('parallel_debug')
+
+def configure(ctx):
+	ctx.load('parallel_debug')
+
+def build(ctx):
+
+	ctx.load('greenfirst', tooldir='.')
+
+	ctx.jobs = 4
+	def touch(tsk):
+		tsk.outputs[0].write('')
+		if tsk.__class__.__name__ == 'green':
+			time.sleep(0.2)
+		elif tsk.__class__.__name__ == 'yellow':
+			time.sleep(3)
+		else:
+			time.sleep(0.3)
+
+	for x in range(40):
+		ctx(rule=touch, always=True, name='pink', color='PINK', target='pink%s.txt' % x)
+
+	for x in range(5):
+		lst = []
+		for y in range(60):
+			name = 'green%s_%s.txt' % (x, y)
+			lst.append(name)
+			ctx(rule=touch, always=True, target=name, name='green', color='GREEN')
+		ctx(rule=touch, always=True, source=lst, name='yellow', color='YELLOW', target='yellow%s.txt' % x)
+

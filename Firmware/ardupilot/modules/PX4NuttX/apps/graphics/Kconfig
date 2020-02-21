@@ -1,0 +1,18 @@
+#
+# For a description of the syntax of this configuration file,
+# see misc/tools/kconfig-language.txt.
+#
+
+config TIFF
+	bool "TIFF file generation library"
+	default n
+	---help---
+		Enable support for the TIFF file generation program.
+
+if TIFF
+
+menu "TIFF Screenshot Utility"
+source "$APPSDIR/graphics/screenshot/Kconfig"
+endmenu
+
+endif

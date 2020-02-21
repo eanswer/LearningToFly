@@ -1,0 +1,286 @@
+NxWidgets-1.0
+=============
+
+The initial version of NxWidgets was released on March 22, 2012.  This
+package has been used in several projects prior to its release to open
+source and is considered stable its initial release (although not all
+features have been fully verified).
+
+NxWidgets-1.1
+=============
+
+The 2nd release of the NxWidgets package was made on May 19, 2012.  The
+headline new feature in this release is:
+
+* NxWM, the tiny window manager based on NX and NxWidgets. NxWM is true
+  multiple window manager but only one window is displayed at a time.
+  This simplification helps performance on LCD based products (in the
+  same way that a tiled window manager helps) and also makes the best
+  use of small displays.  It is awkward from a human factors point-of-view
+  trying to manage multiple windows on a small display.
+
+  The window manager consists of a task bar with icons representing the
+  running tasks.  If you touch the task's icon, it comes to the top.  Each
+  window has a toolbar with (1) a title, (2) a minimize button, and (3) a
+  stop application button using the standard icons for these things. User
+  input via a touchscreen or mouse and keyboard is supported.
+
+  There is always a start window that is available in the task bar.  When
+  you touch the start window icon, it brings up the start window containing
+  icons representing all of the available applications.  If you touch an
+  icon in the start window, it will be started and added to the task bar.
+
+  There is a base class that defines an add-on application and an
+  interface that supports incorporation of new application.  The only
+  application that is provided is NxConsole.  This is an  NSH session
+  running in a window.  You should be able to select the NX icon in the start
+  menu and create as many NSH sessions in windows as you want. (keybard input
+  still comes through serial).
+
+  This initial realease of NxWM should be considered an alpha release.
+  All know issues are listed in the top-level TODO list.
+
+Other important new features include:
+
+* NxWidgets::IBitmap and NxWidgets::CRlePalettBitmap:  Extended to
+  support different color look-up-tables (LUTs).  This allows images
+  to be highlighted when touched, for example.
+* NxWidgets::CImage:  Extended to support button-like behavior.  CImage
+  widgets now work well as touchable icons.
+* NxWidgets::CWidgetControl:  Add a semaphore to force clients to wait if the
+  size or position of the window is not yet known (multi-user mode only).
+  Enabled and verified creation of framed windows.
+* NxWidgets::CWindowEventHandler and NxWidgets::CWindowEventHandler:  Add
+  support for getting callbacks for window events.
+* DOxygen documentation support.  Contributed by Jose Pablo Carballo.
+
+An effort is underway to simplify NxWidgets and reduce its memory footprint:
+
+* NxWidgets::CNxWidget: Removed support for "shelving" widgets, reference
+  constants, and close types. Remove all support for widgets in a "vertical"
+  hierarchy.  Now widgets exist in a flat, two-dimensional space and should
+  not overlap.  Removed built-in modal loops.
+
+Bug fixes include changes to the following (see the ChangeLog for details):
+
+* NxWidgets::CRlePalettBitmap, NxWidgets::CRlePalettBitmap,
+  NxWidgets::CGraphicsPort, NxWidgets::CWidgetControl
+
+NxWidgets-1.2
+=============
+
+The 3rd release of the NxWidgets package was made on June 15, 2012.  This
+release depends on NuttX-6.19 or above and should not be used with older
+NuttX releases.
+
+New features and enhancements include:
+
+* NxWM::CNxConsole:  The NxWM NxConsole windows now correctly receive keyboard
+  input.  In version 1.1, NxConsoles received input from /dev/console.  That,
+  of course, leads to chaos when there a multiple windows trying to get input
+  from the same device.  There is now a keyboard listener task that will
+  accept input from /dev/console and inject that input into the NX keyboard
+  interface.  NX will give the keyboard input only to the top window that
+  has focus, eliminating the chaos.
+
+* NxWM::CHexcalculator:  The NxWM demonstration/unit test now includes a hex
+  calculator applications.  This demonstrates the use of arrays of buttons
+  within a window.
+
+Bugfixes:
+
+* NxWM::CTaskbar:  Was inappropriately minimizing some windows.  Fixes
+  some window raising/lowering bugs.
+
+* NXWidgets::CButtonArray:  Fix some coloring problems when rending button
+  text in cases where we cannot read from the display device.
+
+As well as other, less critical bugs (see the ChangeLog for details)
+
+NxWidgets-1.3
+=============
+
+The 4th release of the NxWidgets package was made on September 29, 2012.  This
+release depends on NuttX-6.22 or above and should not be used with older
+NuttX releases.
+
+There are no functional changes in this release of NxWidgets.  This release
+is required in order to retain compatibility with the most recent versions
+of NuttX.  These comptibility changes include:
+
+* Naming of function entry points
+* Build system changes
+* Changes needed for the NuttX configuration tool
+
+NxWidgets-1.4
+=============
+
+The 5th release of the NxWidgets package was made on December 20, 2012.  This
+release depends on NuttX-6.24 or above and should not be used with older
+NuttX releases.  This release corresponds to SVN revision r5447.
+
+Note: Nearly all changes between 1.3 and 1.4 were the result of the efforts
+of Petteri Aimonen.
+
+Additional new features and extended functionality in Version 1.4:
+
+* NxWdigets::CNxServer: Reduce start-up delay
+* NxWM::CApplicationWindow: Option to eliminate minimize button.
+* NxWM::CTaskbar: Option to eliminte the background image; highlight current
+  icon in the task bar.
+* NxWidgets::CNumericEdit: New widget. Basically a CLabel with +/- buttons.
+* NxWidgets::CNxTimer:  Replace the original signal-based solution with a
+  work queue-based solution.  This raises some isses about using the
+  internal work queues from user space.
+* Build System:  Misc improvements.
+* Tools: bitmap_converter.py will convert images to NxWidgets RLE-encoded format.
+
+Bugfixes (see the change log for details).  Some of these are very important
+(marked *critical*):
+
+* NxWidgets::CCallback: Misplaced #endif
+* NxWM::CCalculator and NxWM::CStartWindow: Add forward declaration for icon images.
+* glych_cycle:  Correct width, destructor needs to be public.
+* NxWidgets:CText and NxWidgets:CNumericEdite:  Fix some memory freeing bugs
+* NxWidgets::CScrollingPanel:  It is borderless for now because there was no
+  easy way to redraw only the required part of the border.
+
+NxWidgets-1.5
+=============
+
+The 6th release of the NxWidgets package was made on February 1, 2013.  This
+release depends on NuttX-6.25 or above and should not be used with older
+NuttX releases.  This release corresponds to SVN revision r5595.
+
+Note: Nearly all of the changes between 1.4 and 1.5 were the result of the
+efforts of Petteri Aimonen.
+
+Additional new features and extended functionality in Version 1.5:
+
+* CNxWidgets::CTabPanel:  A new widget contributed by Petteri Aimonen.
+  This widget provides a tab panel, which has a button bar at the top
+  and panels below it. Pressing a button will select the corresponding
+  panel.
+* NxWidgets::CGraphicsPort: Many times we only want a constant background.
+  In that case the old code filled the background, read it back, rendered
+  the text and then wrote it back. When used with an LCD this causes
+  some screen flicker. Added a variant of drawText that takes background
+  color, so that the background and text can both be rendered at one go.
+* NxWM::CScrollingPanel::scrollChildren(): Avoid unnecessary redraws in
+  CScrollingPanel
+* Kconfig: Added several "enabling" settings that must be selected to
+  override the default setting. 
+* UnitTests:  Changes for compatibility with NuttX-6.25
+
+Bugfixes:
+
+* NxWidgets::CGraphicsPort::move():  Fix typo bug in bounding rectangle
+  calculation.
+* NxWM::CCycleButton:  Remove the separator from CCycleButton. It draws in
+  wrong place, and doesn't look very good in the correct place either.
+* NxWidgets::CLabel: The label was drawn as a single rectangular region,
+  then a text was added to the on top of this.  The result is that the
+  text would flicker when the CLabel was updated. With this change, the
+  two step update is replaced with a five step update:  The background
+  is updated as four rectangulear regions (leaving the previous text in
+  place), then the new text is updated.  This eliminates the flicker.
+* CGraphicsPort::_drawText:  Renamed from CGraphicsPort::drawText in order
+  to eliminate some naming collisions when overloaded in some configurations
+  (i.e., when both bool and nx_pixel_t are uint8_t).
+
+NxWidgets-1.6
+=============
+
+The 7th release of the NxWidgets package was made on March 15, 2013.  This
+release depends on NuttX-6.26 or above and should not be used with older
+NuttX releases.  This release corresponds to SVN revision r5745.
+
+Note: All of the changes between 1.5 and 1.6 were the result of the
+efforts of Petteri Aimonen.
+
+Additional new features and extended functionality in Version 1.6:
+
+* NXWidgets::CNxWidget:  Add an inline function to get the current style.
+* NXWidgets::CCycleButton: Make CCycleButton change state in onPreRelease().
+  This way the new value is already available when a listener gets the
+  action event.
+* NxWidgets::CImage:  Two enhancements:
+  1) Allow changing the bitmap even after the control has been created.
+  2) Allow giving 'null' to have the control draw no image at all.
+
+* NxWM::CTaskBar: Make a some methods of CTaskbar virtual to allow
+  customizations.
+* NxWM::CTaskBar:  Allow windows with null icon. This makes sense for e.g.
+  full screen windows.
+* NxWM::CApplicationWindow:  Add config options to override NxWM
+  stop/minimize icons.
+* NwWM::CStartWindow, NxWM::CWindowMessenger: Get rid of the start window
+  thread. Instead, handle all events through the USRWORK work queue.
+  For me, this was necessary because I would open some files in button
+  handlers and close them in NxTimer handlers. If these belonged to
+  different tasks, the close operation would fail.  Further benefits:
+  + Gets rid of one task and message queue.
+  + Reduces the amount of code required
+  + Decouples CStartWindow from everything else - now it is just a window
+    with application icons, not an integral part of the event logic.
+  + All events come from the same thread, which reduces the possibility of
+    multithreading errors in user code.
+  + The user code can also send events to USRWORK, so that everything gets
+    serialized nicely without having to use so many mutexes.
+  Drawbacks:
+  - Currently the work state structure is malloc()ed, causing one allocation
+    and free per each input event. Could add a memory pool for these later, but
+    the speed difference doesn't seem noticeable.
+  - The work queue will add ~50 ms latency to input events. This is however
+    configurable, and the delay is anyway short enough that it is unnoticeable.
+
+Bugfixes:
+
+* NxWidgets::CWidgetControl:  Added another semaphore, boundssem, which
+  is set as soon as the screen bounds are known.  This corrects two
+  problems:
+  1) Due to the way nxgl_rectsize computes the size, it will never
+     be 0,0 like CWidgetControl expects. Therefore the size is considered
+     valid even though it has not been set yet.
+  2) After the check is fixed to test for > 1, NxWM window creation will
+     hang. This is due to the fact that it uses the screen bounds for
+     determining window size. This was being blocked on geosem, which
+     is only posted after the size has been set.
+* NxWidgets::CNxTimer:  Previously repeated timers were re-enabled after
+  the timer action event. Consequently, if the action event handler tried
+  to stop the timer, the request would be ignored.  Changes the order
+  so that the timer is re-enabled before the callback.  There is still
+  no risk of re-entrancy, because everything executes on the USRWORK work
+  queue.
+* NxWidgets::CLabel: Fix backward conditional compilation in the "flicker
+  free" logic.
+* NxWidgets::CMultiLineTestBox: Fix text placement error.  From Petteri
+  Aimonen.
+
+* NxWidgets/tools/bitmap_converter.py: Fix bitmap_converter.py so that
+  it works with indexed input images.
+
+NxWidgets-1.7
+=============
+
+The 8th release of the NxWidgets package was made on April 28, 2013.  This
+release depends on NuttX-6.26 or above and should not be used with older
+NuttX releases.
+
+Note: All of the changes between 1.6 and 1.7 were the result of the
+efforts of Petteri Aimonen.
+
+Additional new features and extended functionality in Version 1.7:
+
+* NxWidgets::CGlyphButton: Generate action event, like CButton does.
+* NxWM::CTaskBar:  Add option CONFIG_NXWM_TASKBAR_NO_BORDER to suppress
+  drawing of the border on the taskbar.
+* NxWidgets::CNxTimer:  Add function to check if CNxTimer is running.
+* NxWidgets::CNxWidgets:  Allow overriding of the checkCollision() method.
+
+Bugfixes:
+
+* NxWidgets bitmap_converter.py: Fix bug when image width > 255
+* NxWM::CScrollbarPanel:  Fix spelling error in class name: CScollbarPanel
+  should be CScrollbarPanel
+* NxWidgets::CGlyphButton:  Prevent drawing outside of the bitmap size.

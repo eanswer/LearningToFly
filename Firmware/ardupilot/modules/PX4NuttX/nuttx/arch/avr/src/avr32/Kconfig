@@ -1,0 +1,12 @@
+#
+# For a description of the syntax of this configuration file,
+# see misc/tools/kconfig-language.txt.
+#
+
+if ARCH_FAMILY_AVR32
+comment "AVR32 Configuration Options"
+
+# Note - no toolchain selection here as there is only one
+# supported toolchain.
+
+endif

@@ -1,0 +1,41 @@
+#!nsh
+#
+# Standard apps for multirotors:
+# att & pos estimator, att & pos control.
+#
+
+# The system is defaulting to INAV_ENABLED = 1
+# but users can alternatively try the EKF-based
+# filter by setting INAV_ENABLED = 0
+if param compare INAV_ENABLED 1
+then
+	attitude_estimator_q start
+	position_estimator_inav start
+else
+	if param compare LPE_ENABLED 1
+	then
+		attitude_estimator_q start
+		local_position_estimator start
+	else
+		ekf2 start
+	fi
+fi
+
+if mc_att_control start
+then
+else
+	# try the multiplatform version
+	mc_att_control_m start
+fi
+
+if mc_pos_control start
+then
+else
+	# try the multiplatform version
+	mc_pos_control_m start
+fi
+
+#
+# Start Land Detector
+#
+land_detector start multicopter

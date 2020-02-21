@@ -1,0 +1,5 @@
+/.config
+/.config.cmd
+/.config.old
+/build_*
+/toolchain_build_*

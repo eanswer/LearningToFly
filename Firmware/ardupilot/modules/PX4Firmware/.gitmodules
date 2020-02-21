@@ -1,0 +1,21 @@
+[submodule "mavlink/include/mavlink/v1.0"]
+	path = mavlink/include/mavlink/v1.0
+	url = git://github.com/mavlink/c_library.git
+[submodule "src/modules/uavcan/libuavcan"]
+	path = src/modules/uavcan/libuavcan
+	url = git://github.com/UAVCAN/libuavcan.git
+[submodule "Tools/genmsg"]
+	path = Tools/genmsg
+	url = https://github.com/ros/genmsg.git
+[submodule "Tools/gencpp"]
+	path = Tools/gencpp
+	url = https://github.com/ros/gencpp.git
+[submodule "src/lib/matrix"]
+	path = src/lib/matrix
+	url = https://github.com/PX4/Matrix.git
+[submodule "src/lib/DriverFramework"]
+	path = src/lib/DriverFramework
+	url = https://github.com/PX4/DriverFramework.git
+[submodule "src/lib/ecl"]
+	path = src/lib/ecl
+	url = https://github.com/PX4/ecl.git

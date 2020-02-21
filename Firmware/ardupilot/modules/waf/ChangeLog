@@ -1,0 +1,83 @@
+NEW IN WAF 1.9.2
+----------------
+* Fix a Python 3 encoding error when displaying the file hash in 'waf dist' #1769
+* Force qt5 static library detection with 'QT5_XCOMPILE=1 QT5_FORCE_STATIC=1 waf configure' #1588
+* Force the parent os.environ value as default in pre-forked processes #1791
+* Support flexflags as arguments #1782
+* Update a few extensions: xcode, pytest, msvcdeps, cppcheck, win32_opts, codelite
+* Store Task.last_cmd selectively, so that extensions can use them (clang_compilation_database)
+* Set TaskBase.keep_last_cmd to keep the last command executed
+* New pyqt5 extension #1790
+* Remove all non-BSD code from the Waf archive file
+
+NEW IN WAF 1.9.1
+----------------
+
+* Execute proceses with run_regular_process when arguments are not serializable #1764
+* Do not de-duplicate configuration flags assigned through uselib_store (conf.check tests)
+* Let the documentation scripts generate SVG outputs
+
+NEW IN WAF 1.9.0
+----------------
+
+* General enhancements:
+  - Detect Clang first on many platforms, in particular on FreeBSD #1528
+  - Remove Node.cache_sig and Node.sig so that dependencies involve file contents by default #1580
+  - Change cflags in the beginning / cppflags at the end #1505
+  - Merge ${FOO}${BAR} flags in commands executed without a shell (no spaces inserted)
+  - Interpret empty command-line defines as integer values for dependency calculation #1704
+  - Waf tools are not cached on "waf configure" by default anymore; pass conf.load(.., cache=True)
+  - Enable a consistent progress bar output #1641
+  - Add ${VAR?X} constructs in script expressions to enable simple conditional outputs
+  - Enable 'waf dist' to package arbitrary symlinks in tarballs #1719
+  - Enable regexp objects in @extension besides strings for file extensions
+  - Match extensions in the order of last definition
+  - Task generators are now processed group-by-group, so the next task generators are
+    processed when all tasks in a previous group are complete; bld.post_mode=POST_LAZY
+    becomes thus the default (playground/dynamic_build/ examples)
+  - Process Qt5 files in the way suggested by the Qt documentation
+  - Installation methods install_files/install_as/symlink_as create regular task generators
+    and regular tasks so that installation outputs can be re-used easily
+  - Subclass waflib.Build.ConfiguredContext to enable configuration-dependent user commands
+  - Enable @argfile procesing in Task.exec_command when argument limits are exceeded
+  - Apply optional tsk.env.PATH values in Task.exec_command
+  - Enable ut_str to process scriptlet expressions for C/C++ unit tests
+  - Minimize the amount of paths added to unit test environment variable
+  - Restore configuration values with Configure.autoconfig='clobber' #1758
+  - Rebuilds are applied on file contents so that update_outputs is no longer needed
+
+* Performance highlights:
+  - Reduce the key size in bld.task_sigs by adding bld.node_sigs and bld.imp_sigs
+  - Remove __hash__ and __eq__ from Context, Node and Task #1629
+  - Detect visual studio versions lazily by default
+  - Remove the uses of run_once that can consume a lot of memory; add a proper LRU cache
+  - Enable pre-forked builds by default to achieve faster builds, up to 2x speedup on short-lived processes
+  - Enable faster consumers in Runner.py
+  - Add the tool 'nobuild.py' to help with performance troubleshooting
+  - Enable profiling with the --profile command-line option
+
+* API changes:
+  - The minimum Python version required is Python 2.5
+  - Add Task.get_cwd()
+  - Remove the command called 'update'
+  - Remove unused variables and functions:
+    - TaskBase.attr()
+    - Build.POST_BOTH
+    - Options.platform
+    - Options.cmds
+    - Task.dep_vars (define Task.vars on instances if necessary)
+    - Utils.nogc
+    - Configure.err_handler
+    - All duplicate split() functions from Utils
+  - Remove the unused attribute 'mac_resources', use 'mac_files' instead (see demos/mac_app)
+  - Remove qt4 and kde4 from the default modules
+  - Refactor msvc.py
+  - Task.sig_vars, Task.sig_explit_deps and Task.sig_implicit_deps return None
+  - Use relative paths in apply_incpaths by default (and absolute ones when paths cross drives)
+  - Modify Utils.run_once so that it accepts a list of *args
+  - Better consistency between check_cfg and check_cc variables
+  - task_gen.mapping and task_gen.prec are not defined by default on instances anymore, but
+    instances can still define their own mappings to override the defaults, but in
+    that case all mappings/precedences must be present. These features were not used in Waf 1.8.
+  - Do not truncate _task suffixes from Task class names if present
+

@@ -1,0 +1,13 @@
+#
+# For a description of the syntax of this configuration file,
+# see misc/tools/kconfig-language.txt.
+#
+
+config SYSTEM_SYSINFO
+	bool "NSH sysinfo command"
+	default n
+	---help---
+		Enable support for the NSH sysinfo command.
+
+if SYSTEM_SYSINFO
+endif

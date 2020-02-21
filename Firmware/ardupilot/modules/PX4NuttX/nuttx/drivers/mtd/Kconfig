@@ -1,0 +1,255 @@
+#
+# For a description of the syntax of this configuration file,
+# see misc/tools/kconfig-language.txt.
+#
+
+comment "MTD Configuration"
+
+config MTD_PARTITION
+	bool "Support MTD partitions"
+	default n
+	---help---
+		MTD partitions are build as MTD drivers that manage a sub-region
+		of the FLASH memory.  The contain the original FLASH MTD driver and
+		simply manage all accesses to assure that (1) FLASH accesses are
+		always offset to the beginning of the partition, and (2) that FLASH
+		accesses do not extend outside of the partition.
+
+		A FLASH device may be broken up into several partitions managed,
+		each managed by a separate MTD driver.  The MTD parition interface
+		is described in:
+
+			include/nuttx/mtd.h
+			FAR struct mtd_dev_s *mtd_partition(FAR struct mtd_dev_s *mtd, off_t offset, off_t nblocks);
+
+		Each call to mtd_partition() will create a new MTD driver instance
+		managing the sub-region of flash beginning at 'offset' (in blocks)
+		and of size 'nblocks' on the device specified by 'mtd'.
+
+config MTD_BYTE_WRITE
+	bool "Byte write"
+	default n
+	---help---
+		Some devices (such as the EON EN25F80) support writing an arbitrary
+		number of bytes to FLASH. This setting enables MTD interfaces to
+		support such writes.  The SMART file system can take advantage of
+		this option if it is enabled.
+
+comment "MTD Device Drivers"
+
+config RAMMTD
+	bool "RAM-based MTD driver"
+	default n
+	---help---
+		Build support for a RAM-based MTD driver.
+
+if RAMMTD
+
+config RAMMTD_BLOCKSIZE
+	int "RAM MTD block size"
+	default 512
+
+config RAMMTD_ERASESIZE
+	int "RAM MTD erase block size"
+	default 4096
+
+config RAMMTD_ERASESTATE
+	hex "Simulated erase state"
+	default 0xff
+
+config RAMMTD_FLASHSIM
+	bool "RAM MTD FLASH Simulation"
+	default n
+	---help---
+		RAMMTD_FLASHSIM will add some extra logic to improve the level of
+		FLASH simulation.
+
+endif
+
+config MTD_AT24XX
+	bool "I2C-based AT24XX eeprom"
+	default n
+	select I2C
+	---help---
+		Build support for I2C-based at24cxx EEPROM(at24c32, at24c64,
+		at24c128, at24c256)
+
+if MTD_AT24XX
+
+config AT24XX_SIZE
+	int "at24xx size(kByte)"
+	default 64
+
+config AT24XX_ADDR
+	hex "at24xx i2c address"
+	default 0x50
+
+endif
+
+config MTD_AT45DB
+	bool "SPI-based AT45DB flash"
+	default n
+	select SPI
+
+if MTD_AT45DB
+
+config AT45DB_FREQUENCY
+	int "at45db frequency"
+	default 1000000
+
+config AT45DB_PREWAIT
+	bool "enables higher performance write logic"
+	default y
+
+config AT45DB_PWRSAVE
+	bool "enables power save"
+	default n
+
+endif
+
+config MTD_M25P
+	bool "SPI-based M25P FLASH"
+	default n
+	select SPI
+
+if MTD_M25P
+
+config M25P_SPIMODE
+	int "M25P SPI mode"
+	default 0
+
+config M25P_MANUFACTURER
+	hex "M25P manufacturers ID"
+	default 0x20
+	---help---
+		Various manufacturers may have produced the parts.  0x20 is the manufacturer ID
+		for the STMicro MP25x serial FLASH.  If, for example, you are using the a Macronix
+		International MX25 serial FLASH, the correct manufacturer ID would be 0xc2.
+
+config M25P_MEMORY_TYPE
+	hex "M25P memory type ID"
+	default 0x20
+	---help---
+		The memory type for M25 "P" series is 0x20, but the driver also supports "F" series
+		devices, such as the EON EN25F80 part which adds a 4K sector erase capability.  The
+		memory type for "F" series parts from EON is 0x31.  The 4K sector erase size will
+		automatically be enabled when filessytems that can use it are enabled, such as SMART.
+
+config M25P_SUBSECTOR_ERASE
+	bool "Sub-Sector Erase"
+	default n
+	---help---
+		Some devices (such as the EON EN25F80) support a smaller erase block
+		size (4K vs 64K).  This option enables support for sub-sector erase.
+		The SMART file system can take advantage of this option if it is enabled.
+
+endif
+
+config MTD_SMART
+	bool "Sector Mapped Allocation for Really Tiny (SMART) Flash support"
+	default y
+	---help---
+		The MP25x series of Flash devices are typically very small and have a very large
+		erase block size.  This causes issues with the standard Flash Translation Layer
+		block driver since it tries to allocate a RAM block the size of a flash erase
+		block, which is typically 64K.  This block driver uses a different approach
+		to sacrifice performance for RAM memory footprint by saving data in sectors
+		(typically 2K - 4K based on memory size) and relocating sectors as needed when
+		an erase block needs to be erased.
+
+config MTD_SMART_SECTOR_SIZE
+	int "SMART Device sector size"
+    depends on MTD_SMART
+	default 1024
+	---help---
+		Sets the size of a single alloction on the SMART device.  Larger sector sizes
+		reduce overhead per sector, but cause more wasted space with a lot of smaller
+		files.
+
+config MTD_RAMTRON
+	bool "SPI-based RAMTRON NVRAM Devices FM25V10"
+	default n
+	select SPI
+	---help---
+		SPI-based RAMTRON NVRAM Devices FM25V10
+
+config MTD_SST25
+	bool "SPI-based SST25 FLASH"
+	default n
+	select SPI
+
+if MTD_SST25
+
+config SST25_SPIMODE
+	int "SST25 SPI Mode"
+	default 0
+
+config SST25_SPIFREQUENCY
+	int "SST25 SPI Frequency"
+	default 20000000
+
+config SST25_READONLY
+	bool "SST25 Read-Only FLASH"
+	default n
+
+config SST25_SECTOR512
+	bool "Simulate 512 byte Erase Blocks"
+	default n
+
+config SST25_SLOWWRITE
+	bool
+	default y
+
+config SST25_SLOWREAD
+	bool
+	default n
+
+endif
+
+config MTD_SST39FV
+	bool "SST39FV NOR FLASH"
+	default n
+	---help---
+		Selects 16-bit SST NOR FLASH.  This includes support for:
+
+		SST39FV1601/SST39FV1602:  2Mb
+		SST39FV3201/SST39FV3202:  4Mb
+
+if MTD_SST39FV
+
+config SST39VF_BASE_ADDRESS
+	hex "SST39FV bass address"
+	default 0x00000000
+	---help---
+		This is the address where the SST29VF FLASH can be found in memory.
+
+endif
+
+config MTD_W25
+	bool "SPI-based W25 FLASH"
+	default n
+	select SPI
+
+if MTD_W25
+
+config W25_SPIMODE
+	int "W25 SPI Mode"
+	default 0
+
+config W25_SPIFREQUENCY
+	int "W25 SPI Frequency"
+	default 20000000
+
+config W25_READONLY
+	bool "W25 Read-Only FLASH"
+	default n
+
+config W25_SECTOR512
+	bool "Simulate 512 byte Erase Blocks"
+	default n
+
+config W25_SLOWREAD
+	bool
+	default n
+
+endif

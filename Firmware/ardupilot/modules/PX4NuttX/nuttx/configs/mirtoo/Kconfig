@@ -1,0 +1,14 @@
+#
+# For a description of the syntax of this configuration file,
+# see misc/tools/kconfig-language.txt.
+#
+
+if ARCH_BOARD_MIRTOO
+
+config MIRTOO_RELEASE
+	int "Mirtoo Release 1 (R1)"
+	default 2
+	---help---
+		Select the Mirtoo release number
+
+endif

@@ -1,0 +1,137 @@
+#
+# For a description of the syntax of this configuration file,
+# see misc/tools/kconfig-language.txt.
+#
+
+config MM_MULTIHEAP
+	bool "Build support for multiple heaps"
+	default n
+	---help---
+		Build interfaces to support multiple heaps.  This should not be
+		confused with memory regions.  One heap may be composed of multiple,
+		non-contiguous memory regions.  The fact that the heap is composed
+		of such multiple regions is invisible to the end-user (other than
+		the heap comes pre-fragmented).  Multiple heaps, on the other hand,
+		supports a separate set of allocators that operate on a separate set
+		of memory regions.
+
+config MM_KERNEL_HEAP
+	bool "Support a protected, kernel heap"
+	default y
+	depends on NUTTX_KERNEL && MM_MULTIHEAP
+	---help---
+		Partition heap memory into two parts:  (1) a protected, kernel-mode
+		heap accessible only by the NuttX kernel, and (2) an unprotected
+		user-mode heap for use by applications.  If you are only interested
+		in protected the kernel from read access, then this option is not
+		necessary.  If you wish to secure the kernel data as well, then
+		this option should be selected.
+
+		The kernel heap size that is used is provided a a platform-specific
+		up_allocate_kheap() interface.  This configuration setting is made
+		available to that platform specific code.  However, the
+		up_allocate_kheap() interface may chose to ignore this setting if it
+		has a more appropriate heap allocation strategy.
+
+config MM_KERNEL_HEAPSIZE
+	int "Kernal heap size"
+	default 8192
+	depends on MM_KERNEL_HEAP
+	---help---
+		This is the size of the a protected, kernel-mode heap (in bytes).
+		The remaining of available memory is given to the unprotected
+		user-mode heap.  This value may need to be aligned to units of the
+		size of the smallest memory protection region.
+
+config MM_SMALL
+	bool "Small memory model"
+	default n
+	---help---
+		Each memory allocation has a small allocation overhead.  The size
+		of that overhead is normally determined by the "width" of the
+		address support by the MCU.  MCUs that support 16-bit addressability
+		have smaller overhead than devices that support 32-bit addressability.
+		However, there are many MCUs that support 32-bit addressability *but*
+		have internal SRAM of size less than or equal to 64Kb.  In this case,
+		MM_SMALL can be defined so that those MCUs will also benefit
+		from the smaller, 16-bit-based allocation overhead.
+
+		WARNING:  This selection will also change the alignment of allocated
+		memory.  For example, on ARM memory will have 8-byte alignment by
+		default.  If MM_SMALL is selected, then allocated memory will have
+		only 4-byte alignment.  This may be important on some platforms where
+		64-bit data is in allocated structures and 8-byte alignment is required.
+
+		NOTE: If MM_MULTIHEAP is selected, then this selection applies to all
+		heaps.
+
+config MM_REGIONS
+	int "Number of memory regions"
+	default 1
+	---help---
+		If the architecture includes multiple, non-contiguous regions of
+		memory to allocate from, this specifies the number of memory regions
+		that the memory manager must handle and enables the API
+		mm_addregion(heap, start, end);
+
+		NOTE: If MM_MULTIHEAP is selected, then this maximum number of regions
+		applies to all heaps.
+
+config ARCH_HAVE_HEAP2
+	bool
+
+config HEAP2_BASE
+	hex "Start address of second user heap region"
+	default 0x00000000
+	depends on ARCH_HAVE_HEAP2
+	---help---
+		The base address of the second heap region.
+
+config HEAP2_SIZE
+	int "Size of the second user heap region"
+	default 0
+	depends on ARCH_HAVE_HEAP2
+	---help---
+		The size of the second heap region.
+
+config GRAN
+	bool "Enable Granule Allocator"
+	default n
+	---help---
+		Enable granual allocator support.  Allocations will be aligned to the
+		granule size; allocations will be in units of the granule size.
+		Larger granules will give better performance and less overhead but
+		more losses of memory due to alignment and quantization waste.
+
+		NOTE: The current implementation also restricts the maximum
+		allocation size to 32 granaules.  That restriction could be
+		eliminated with some additional coding effort.
+
+config GRAN_SINGLE
+	bool "Single Granule Allocator"
+	default n
+	depends on GRAN
+	---help---
+		Select if there is only one instance of the granule allocator (i.e.,
+		gran_initialize will be called only once. In this case, (1) there
+		are a few optimizations that can can be done and (2) the GRAN_HANDLE
+		is not needed.
+
+config GRAN_INTR
+	bool "Interrupt level support"
+	default n
+	depends on GRAN
+	---help---
+		Normally mutual exclusive access to granule allocator data is assured
+		using a semaphore.  If this option is set then, instead, mutual
+		exclusion logic will disable interrupts.  While this options is more
+		invasive to system performance, it will also support use of the granule
+		allocator from interrupt level logic.
+
+config DEBUG_GRAN
+	bool "Granule Allocator Debug"
+	default n
+	depends on GRAN && DEBUG
+	---help---
+		Just like DEBUG_MM, but only generates ouput from the gran
+		allocation logic.

@@ -1,0 +1,119 @@
+#
+# For a description of the syntax of this configuration file,
+# see misc/tools/kconfig-language.txt.
+#
+
+config AUDIO
+	bool "Audio Support"
+	default n
+	---help---
+		Enables overall support for Audio library.
+
+if AUDIO
+
+config AUDIO_NCHANNELS
+	int "Number of Audio Channels"
+	default 2
+	---help---
+		Stereo channel support is standard, but some systems may support 5 or 7
+		channel capability.
+
+config AUDIO_LARGE_BUFFERS
+	bool "Support Audio Buffers with greater than 65K samples"
+	default n
+	---help---
+		By default, the Audio Pipeline Buffer uses a 16-bit max sample count, limiting
+		the number of samples per buffer to 65K.  Enable this option to specify a
+		32-bit max sample count for increased samples / buffer capability.
+		channel capability.
+
+config AUDIO_CUSTOM_DEV_PATH
+	bool "Use custom device path"
+	default n
+	---help---
+		By default, all audio devices on the target are are registered in the
+		/dev/audio directory.  Select this option to change the default location
+		for the device registration.
+
+if AUDIO_CUSTOM_DEV_PATH
+
+config AUDIO_DEV_ROOT
+	bool "Place audio devices in /dev"
+	default n
+	---help---
+		This option causes all device entries to appear in /dev with all the
+		other device entries.  This option generates the smallest code and
+		RAM footprint.
+
+if !AUDIO_DEV_ROOT
+
+config AUDIO_DEV_PATH
+	string "Base path for Audio devices"
+	default "/dev/audio"
+	---help---
+		The path on the target where audio devices are registered.  The default
+		is to place all audio devices in the /dev/audio/ directory.
+
+endif
+endif
+
+menu "Supported Audio Formats"
+
+config AUDIO_FORMAT_PCM
+	bool "PCM Audio"
+	default y
+	---help---
+		Build in support for PCM Audio format.
+
+config AUDIO_FORMAT_MP3
+	bool "MPEG 3 Layer 1"
+	default n
+	---help---
+		Build in support for MP3 Audio format.
+
+config AUDIO_FORMAT_WMA
+	bool "WMA Format (see copyright notice)"
+	default n
+	---help---
+		Add in support for Microsoft Windows Media format.
+
+config AUDIO_FORMAT_OGG_VORBIS
+	bool "Ogg Vorbis format"
+	default n
+	---help---
+		Build in support for the Open Source Ogg Vorbis format.
+
+endmenu
+
+# These are here as placeholders of what could be added
+
+if CONFIG_AUDIO_PLANNED
+
+config AUDIO_MIXER
+	bool "Planned - Enable support for the software based Audio Mixer"
+	default n
+	---help---
+		The Audio mixer is a software-only based component that can be used
+		to perform audio channel or device mixing.
+
+config AUDIO_MIDI_SYNTH
+	bool "Planned - Enable support for the software-based MIDI synthisizer"
+	default n
+	---help---
+		Builds a simple MIDI synthisizer.
+
+config AUDIO_OUTPUT_JACK_CONTROL
+	bool "Planned - Enable support for output jack control"
+	default n
+	---help---
+		Builds a simple MIDI synthisizer.
+
+config AUDIO_FONT
+	bool "Planned - Enable support for the Audio Font"
+	default n
+	---help---
+		The Audio font provides common audio symbols.
+
+endif
+
+endif

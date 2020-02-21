@@ -1,0 +1,77 @@
+#! /usr/bin/env python
+# encoding: utf-8
+
+from waflib import Task, TaskGen
+top = '.'
+out = 'build'
+APPNAME = 'TestProject'
+VERSION = '1.0'
+
+"""
+This demo will create an XCode project containing
+an App bundle target, a dynamic library target,
+a static library target and an executable target.
+The generated XCode project can then be opened
+and XCode can build those targets.
+Tested in XCode 6 & 7.
+"""
+
+def configure(conf):
+	conf.env.FRAMEWORK_VERSION = '1.0'
+	conf.env.ARCHS = 'x86_64'
+	conf.env.INSTALL_PATH = '/my/install/path'
+
+	# This must be called at the end of configure()
+	conf.load('xcode6')
+
+def build(bld):
+	bld.load('xcode6')
+	tg = bld.framework(
+		includes='include',
+
+		# Specify source files.
+		# This will become the groups (folders) inside XCode.
+		# Give a dictionary to group by name. Use a list to add everything in one
+		source_files={
+			'MyLibSource': bld.path.ant_glob('src/MyLib/*.cpp|*.m|*.mm'),
+			'Include': bld.path.ant_glob(incl=['include/MyLib/*.h', 'include'], dir=True)
+		},
+
+		# export_headers will put the files in the
+		# 'Header Build Phase' in Xcode - i.e tell XCode to ship them with your .framework
+		export_headers=bld.path.ant_glob(incl=['include/MyLib/*.h', 'include/MyLib/SupportLib'], dir=True),
+		target='MyLib',
+		install='~/Library/Frameworks'
+	)
+
+	bld.env.LIB_SDL2 = '/Library/Frameworks/SDL2.framework/SDL2'
+	tg2 = bld.app(
+		source_files=bld.path.ant_glob('src/*.cpp'),
+		includes=tg.includes,
+		target='MyApp',
+		use='MyLib',
+		uselib='SDL2',
+		cxxflags='-O3',
+		framework='Cocoa',
+		settings={"Debug": {"CONFIG_NAME": 'Debug'}}
+	)
+
+	bld.dylib(
+		source_files=bld.path.ant_glob('src/MyLib/*.cpp'),
+		includes=tg.includes,
+		target='MyDynLib',
+	)
+
+	bld.exe(
+		source_files=['src/test.cpp'],
+		includes=tg.includes,
+		target='MyExe',
+		use='MyDynLib'
+	)
+
+	bld.stlib(
+		source_files=bld.path.ant_glob('src/MyLib/*.cpp'),
+		includes=tg.includes,
+		target='MyStaticLib',
+	)
+

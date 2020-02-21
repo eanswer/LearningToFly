@@ -1,0 +1,103 @@
+#
+# For a description of the syntax of this configuration file,
+# see misc/tools/kconfig-language.txt.
+#
+
+config MMCSD_NSLOTS
+	int "Number of MMC/SD slots"
+	default 1
+	---help---
+		Number of MMC/SD slots supported by the
+		driver. Default is one.
+
+config MMCSD_READONLY
+	bool "Disable MMC/SD write access"
+	default n
+	---help---
+		Provide read-only access.  Default is
+		Read/Write
+
+config MMCSD_MULTIBLOCK_DISABLE
+	bool "Disable MMC/SD multiblock transfer"
+	default n
+	---help---
+		Use only the single block transfer method.
+		This setting is used to work around buggy SDIO drivers that cannot handle
+		multiple block transfers.
+
+config MMCSD_MMCSUPPORT
+	bool "MMC cards support"
+	default y
+	---help---
+		Enable support for MMC cards
+
+config MMCSD_HAVECARDDETECT
+    bool "MMC/SD card detection"
+    default y
+    ---help---
+        SDIO driver card detection is
+        100% accurate
+
+config MMCSD_HAVE_SDIOWAIT_WRCOMPLETE
+    bool "Use SDIO_D Busy to detect Write Complete"
+    default n
+    ---help---
+        SDIO driver will use SDIO_D Busy signaling to detect Write Complete.
+        This option when selected, will enable the MMCSD driver to use the
+        underlying (stm32_sdio only) drivers implementation of the SD specs
+        SDIO_D Busy signaling to detect Write Complete. This will avoid
+        potentially very long (600Ms+) busy waiting in the MMCSD driver.
+        To implement SDIO_D Busy signaling, the underlying driver must
+        be capable of switching the GPIO_SDIO_D0 to be a rising edge sensitive
+        interrupt pin. It must then, condition that pin to detect the rising edge
+        on recipet of SDWAIT_WRCOMPLETE in the SDIO_WAITENABLE call and
+        return it back to regular SDIO mode, when either the ISR fires or pin is
+        found to be high in the SDIO_EVENTWAIT call.
+
+config MMCSD_SPI
+	bool "MMC/SD SPI transfer support"
+	default y
+	depends on SPI
+
+config MMCSD_SPICLOCK
+	int "MMC/SD maximum SPI clock"
+	default 20000000
+	depends on MMCSD_SPI
+	---help---
+		Maximum SPI clock to drive MMC/SD card.
+		Default is 20MHz.
+
+config MMCSD_SDIO
+	bool "MMC/SD sdio transfer support"
+	default n
+
+if MMCSD_SDIO
+config SDIO_DMA
+	bool "SDIO DMA support"
+	default n
+	---help---
+		SDIO driver supports DMA
+
+config SDIO_MUXBUS
+	bool "SDIO bus share support"
+	default n
+	---help---
+		Set this SDIO interface if the SDIO interface
+		or hardware resources are shared with other drivers.
+
+config SDIO_WIDTH_D1_ONLY
+	bool "SDIO 1-bit transfer"
+	default n
+	---help---
+		Select 1-bit transfer mode.  Default:
+		4-bit transfer mode.
+
+config SDIO_BLOCKSETUP
+	bool "SDIO block setup"
+	default n
+	---help---
+		Some hardward needs to be informed of the selected blocksize and the
+		number of blocks.  Others just work on the byte stream.  This option
+		enables the block setup method in the SDIO vtable.
+
+endif

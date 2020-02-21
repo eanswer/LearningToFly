@@ -1,0 +1,13 @@
+.depend
+Make.dep
+.DS_Store
+*.o
+*.a
+*.d
+*.i
+*~
+.swp
+.*.swp
+core
+.gdbinit
+cscope.out

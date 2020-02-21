@@ -1,0 +1,3 @@
+[submodule "test/dspal_tester/cmake_hexagon"]
+	path = test/dspal_tester/cmake_hexagon
+	url = https://github.com/ATLFlight/cmake_hexagon.git
