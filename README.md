@@ -9,7 +9,7 @@
 
 - `SimulationUI`: C++ rigid body simulation to visualize the controller's performance. (C++, Coming Soon)
 - `Training`: Code to train the controller with our method with Reinforcement Learning. (Python)
-- `Firmware`: Modified Ardupilot firmware code to implement our controller on real hardware. (C++, Coming soon)
+- `Firmware`: Modified Ardupilot firmware code to implement our controller on real hardware. (C++)
 
 
 
