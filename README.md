@@ -5,6 +5,10 @@
 
 
 
+This repository implements the code for the paper [Learning to Fly: Computational Controller Design for Hybrid UAVs with Reinforcement Learning](http://people.csail.mit.edu/jiex/papers/LearningToFly/index.html) (**SIGGRAPH 2019**).
+
+
+
 ### Code Structure
 
 - `SimulationUI`: C++ rigid body simulation to visualize the controller's performance. (C++)
@@ -136,3 +140,23 @@
 
 
 - Please refer to Ardupilot [official document](https://ardupilot.org/copter/index.html) for more detials.
+
+
+
+### Citation
+
+If you find our paper or code is useful, please consider citing:
+
+```
+@article{xu2019learning,
+  title={Learning to fly: computational controller design for hybrid UAVs with reinforcement learning},
+  author={Xu, Jie and Du, Tao and Foshey, Michael and Li, Beichen and Zhu, Bo and Schulz, Adriana and Matusik, Wojciech},
+  journal={ACM Transactions on Graphics (TOG)},
+  volume={38},
+  number={4},
+  pages={1--12},
+  year={2019},
+  publisher={ACM New York, NY, USA}
+}
+```
+
