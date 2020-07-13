@@ -5,7 +5,7 @@
 
 
 
-#### Code Structure
+### Code Structure
 
 - `SimulationUI`: C++ rigid body simulation to visualize the controller's performance. (C++)
 - `Training`: Code to train the controller with our method with Reinforcement Learning. (Python)
@@ -13,7 +13,7 @@
 
 
 
-#### Simulation UI
+### Simulation UI
 
 - The code is implemented to visualize the controller's performance in a realistic simulation environment and provide the user interaction to control the hybrid UAV through keyboard.
 
@@ -52,7 +52,7 @@
 
   - It will open a window as below where you can control the hybrid UAV through keyboard commands.
 
-    ![SimulationUI](https://github.com/eanswer/LearningToFly/images/SimulationUI.png)
+    ![SimulationUI](https://github.com/eanswer/LearningToFly/blob/master/images/SimulationUI.png)
 
 - Keyboard Command:
 
@@ -70,7 +70,7 @@
 
 
 
-#### Training
+### Training
 
 - The code has been tested on `Ubuntu 16.04`.
 
@@ -114,7 +114,7 @@
 
 
 
-#### Firmware Deployment
+### Firmware Deployment
 
 - The firmware code is based on the Ardupilot codebase and tested in Pixhawk 1.0.
 
