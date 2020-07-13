@@ -7,9 +7,66 @@
 
 #### Code Structure
 
-- `SimulationUI`: C++ rigid body simulation to visualize the controller's performance. (C++, Coming Soon)
+- `SimulationUI`: C++ rigid body simulation to visualize the controller's performance. (C++)
 - `Training`: Code to train the controller with our method with Reinforcement Learning. (Python)
 - `Firmware`: Modified Ardupilot firmware code to implement our controller on real hardware. (C++)
+
+
+
+#### Simulation UI
+
+- The code is implemented to visualize the controller's performance in a realistic simulation environment and provide the user interaction to control the hybrid UAV through keyboard.
+
+- The code has been tested on `Ubuntu 16.04` and `Ubuntu 18.04`.
+
+- Compiling the code relies on `cmake >= 3.1.0`. Please install it through the instruction in this [link](https://cmake.org/install/) before compiling the code. 
+
+- Compile the code:
+
+  - Enter `SimulationUI` folder.
+
+  - Create build folder and enter it by:
+
+    ```
+    mkdir build; cd build;
+    ```
+
+  - Run cmake and make to compile the code.
+
+    ```
+    cmake -DCMAKE_BUILD_TYPE=Release ../
+    make -j4
+    ```
+
+  - If cmake fails, please install the missing libraries listed in the error message.
+
+- Run the code:
+
+  - The default code will run the simulation for QuadPlane controlled by a pre-trained neural network controller.
+
+  - Run the following command inside the `build` folder:
+
+    ```
+    ./projects/design_viewer/design_viewer
+    ```
+
+  - It will open a window as below where you can control the hybrid UAV through keyboard commands.
+
+    ![SimulationUI](https://github.com/eanswer/LearningToFly/images/SimulationUI.png)
+
+- Keyboard Command:
+
+  - We provide a bunch of keyboard command to allow you to easily control the hybrid UAV.
+  - `p`: start/pause simulation, you need to press `p` after you create the window.
+  - `w/s`: increase/decrease velocity z (vertical velocity, negative value is going up).
+  - `a/d`: increase/decrease target yaw angle.
+  - `up/down`: increase/decrease velocity x (forward velocity).
+  - `left/right`: increase/decrease velocity y (side velocity).
+  - You can use the mouse scroll wheel to zoom in/out (scroll) and change the view (press and move) of the camera.
+  - For more keyboard operation, please refer to the code.
+  - To be noted, there is a dead zone for the velocity z, thus the controller is not triggered until the velocity z is smaller than -0.5.
+
+- Tail-sitter: we also provide the config file and the pretrained controller for tail-sitter. You can modify the code in `DesignViewer.cpp` to load its config file and replace the controller parameter file  `projects/copter_simulation/Controller/NN/NNModelParameters.h` with its controller file (which you can find in `projects/copter_simulation/Controller/NN/TailSitter/`).
 
 
 
